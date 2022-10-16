@@ -52,7 +52,7 @@ def my_task():
     hours = floor(countdown / 60 / 60)
     countdown -= hours * 60 * 60
     minutes = floor(countdown / 60)
-    countdownText = f'{hours}h {minutes}m left to grab this book.'
+    countdownText = f'{hours}h {minutes}m left to grab this book. Expires on: {match.group(0)} (PST).'
     bookText.set_footer(text=countdownText)
 
     #   Infinity Testing Zone
