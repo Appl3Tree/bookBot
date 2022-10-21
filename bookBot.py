@@ -40,19 +40,23 @@ def my_task():
     # Determine hours and minutes until new book.
     pattern = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}')
     script = soup.find("script", text=pattern)
-    if script:
-        match = pattern.search(script.text)
-        if match:
-            expiration_year = int(match.group(0)[0:4])
-            expiration_month = int(match.group(0)[5:7])
-            expiration_day = int(match.group(0)[8:10])
-            expiration = datetime(expiration_year, expiration_month, expiration_day, 7, 0)
+    # Commented due to this actually being false data in PacktPub's Javascript. The books are only available for 24 hours and they don't account for timezones in their scripts.
+    # if script:
+    #     match = pattern.search(script.text)
+    #     if match:
+    #         expiration_year = int(match.group(0)[0:4])
+    #         expiration_month = int(match.group(0)[5:7])
+    #         expiration_day = int(match.group(0)[8:10])
+    #         expiration = datetime(expiration_year, expiration_month, expiration_day, 7, 0)
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     current = datetime.now()
+    expiration = current + timedelta(days=1)
+    expiration = expiration.replace(hour=0, minute=0, second=0, microsecond=0)
     countdown = (expiration - current).total_seconds()
     hours = floor(countdown / 60 / 60)
     countdown -= hours * 60 * 60
     minutes = floor(countdown / 60)
-    countdownText = f'{hours}h {minutes}m left to grab this book. Expires on: {match.group(0)} (PST).'
+    countdownText = f'{hours}h {minutes}m left to grab this book. Expires on: {expiration.day} {months[expiration.month - 1]}, {expiration.year} at {str(expiration)[11:19]} (UTC).'
     bookText.set_footer(text=countdownText)
 
     #   Infinity Testing Zone
