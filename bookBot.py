@@ -34,6 +34,8 @@ def my_task():
             )
     if '\n,' in bookAuthor:
         bookAuthor = bookAuthor.replace('\n,', ',')
+    if '\n ,' in bookAuthor:
+        bookAuthor = bookAuthor.replace('\n,', ',')
     bookText.set_author(name=bookAuthor)
     bookText.set_thumbnail(url=bookImg)
 
